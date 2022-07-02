@@ -89,12 +89,6 @@ public class MapInfo : MonoBehaviour
         return dis;
     }
 
-    public static void SignalFlag()
-    {
-        Debug.Log("Set!");
-        animFlag = false;
-    }
-
     public static void MoveAnimation(GameObject obj, Vector3 direction)
     {
         animFlag = true;
@@ -102,7 +96,7 @@ public class MapInfo : MonoBehaviour
         hash.Add("position", obj.transform.position + direction * 2);
         hash.Add("speed", speed);
         hash.Add("easeType", iTween.EaseType.linear);
-        hash.Add("oncomplete", "SignalFlag");
+        hash.Add("onComplete", "SignalFlag");
         iTween.MoveTo(obj, hash);
     }
 }
