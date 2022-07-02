@@ -14,6 +14,7 @@ public class CreateBlockFromFile : MonoBehaviour
         block.transform.localScale = new Vector3(length, 1f, 1f);
         block.transform.localPosition = new Vector3(length / 2f + left, layer, 0f);
         MapInfo.blockList.Add(new MapInfo.Block(left, layer, length, count));
+        MapInfo.blockObjList.Add(block);
         block.GetComponent<BlockInfo>().id = count;
         for (int i = 0; i < length; i++)
         {

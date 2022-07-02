@@ -5,9 +5,16 @@ using UnityEngine;
 public class BlockInfo : MonoBehaviour
 {
     public int id;
-    public void SignalFlag()
+    public void SignalFlag(int type)
     {
-        Debug.Log("Set!");
-        MapInfo.animFlag = false;
+        MapInfo.animFlag += 1;
+        if (type == 1)
+        {
+            MapInfo.Drop();
+        }
+        else if (type == 2)
+        {
+            MapInfo.CheckLayer();
+        }
     }
 }

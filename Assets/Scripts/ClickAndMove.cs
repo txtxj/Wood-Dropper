@@ -28,12 +28,16 @@ public class ClickAndMove : MonoBehaviour
 			if (Physics.Raycast(ray, out hit, 100))
 			{
 				curObj = hit.transform.gameObject;
+				if (!curObj.CompareTag("Block"))
+				{
+					return;
+				}
 				curindex = curObj.GetComponent<BlockInfo>().id;
 				oriMousePos = Input.mousePosition;
 			}
 			isClick = true;
 		}
-		if (Input.GetMouseButtonUp(0) || MapInfo.animFlag)
+		if (Input.GetMouseButtonUp(0) || MapInfo.animFlag < 0)
 		{
 			isClick = false;
 		}
@@ -46,8 +50,7 @@ public class ClickAndMove : MonoBehaviour
 				int direction = mouseOffset.x > 0 ? 1 : 0;
 				if (Mathf.Abs(mouseOffset.x) > threshold && MapInfo.Movable(curindex, direction))
 				{
-					int dis = MapInfo.Move(curindex, direction);
-					MapInfo.MoveAnimation(curObj, new Vector3(dis, 0f, 0f));
+					MapInfo.Move(curindex, direction);
 					isClick = false;
 				}
 			}

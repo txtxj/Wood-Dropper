@@ -21,15 +21,18 @@ public class MapInfo : MonoBehaviour
         }
     }
     public static List<Block> blockList;
+    public static List<GameObject> blockObjList;
 
     public static float speed = 20f;
-    public static bool animFlag = false;
+    public static int animFlag = 0;
 
     private void Awake()
     {
         board = new int[20, 12];
         blockList = new List<Block>();
-        blockList.Add(new Block(0, 0, 0, 0));
+        blockObjList = new List<GameObject>();
+        blockList.Add(null);
+        blockObjList.Add(null);
     }
 
     public static bool Movable(int index, int direction)
@@ -46,7 +49,7 @@ public class MapInfo : MonoBehaviour
         return false;
     }
 
-    public static int Move(int index, int direction)
+    public static void Move(int index, int direction)
     {
         Block p = blockList[index];
         for (int i = 0; i < p.length; i++)
@@ -80,23 +83,92 @@ public class MapInfo : MonoBehaviour
             k -= p.length - 1;
         }
         int dis = k - p.left;
-        Debug.Log(dis);
         p.left = k;
         for (int i = 0; i < p.length; i++)
         {
             board[p.layer, k + i] = p.id;
         }
-        return dis;
+        MoveAnimation(blockObjList[index], Vector3.right * dis, 1);
     }
 
-    public static void MoveAnimation(GameObject obj, Vector3 direction)
+    public static void MoveAnimation(GameObject obj, Vector3 direction, int type)
     {
-        animFlag = true;
+        animFlag -= 1;
         Hashtable hash = new Hashtable();
         hash.Add("position", obj.transform.position + direction * 2);
         hash.Add("speed", speed);
         hash.Add("easeType", iTween.EaseType.linear);
         hash.Add("onComplete", "SignalFlag");
+        hash.Add("onCompleteParams", type);
         iTween.MoveTo(obj, hash);
+    }
+
+    public static void Drop()
+    {
+        for (int i = 1; i < 20; i++)
+        {
+            for (int j = 0; j < 12; j++)
+            {
+                if (board[i, j] != 0)
+                {
+                    int k = board[i, j];
+                    int depth = i;
+                    for (int u = i - 1; u >= 0 && depth == u + 1; u--)
+                    {
+                        depth = u;
+                        for (int v = 0; v < blockList[k].length; v++)
+                        {
+                            if (board[u, j + v] != 0)
+                            {
+                                depth += 1;
+                                break;
+                            }
+                        }
+                    }
+                    if (depth != i)
+                    {
+                        for (int u = 0; u < blockList[k].length; u++)
+                        {
+                            board[i, blockList[k].left + u] = 0;
+                            board[depth, blockList[k].left + u] = k;
+                        }
+                        blockList[k].layer = depth;
+                        MoveAnimation(blockObjList[k], Vector3.down * (i - depth), 2);
+                    }
+                    j += blockList[k].length - 1;
+                }
+            }
+        }
+    }
+
+    public static void CheckLayer()
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            int j;
+            for (j = 0; j < 12; j++)
+            {
+                if (board[i, j] == 0)
+                {
+                    break;
+                }
+            }
+            if (j == 12)
+            {
+                int k = 0;
+                for (j = 0; j < 12; j++)
+                {
+                    if (board[i, j] != k)
+                    {
+                        k = board[i, j];
+                        blockObjList[k].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+                        blockObjList[k].GetComponent<Rigidbody>().useGravity = true;
+                        MoveAnimation(blockObjList[k], Vector3.back * 2f + new Vector3(Random.Range(0.4f, 0.8f), Random.Range(0.4f, 0.8f), Random.Range(0.4f, 0.8f)), j == 0 ? 0 : 1);
+                    }
+                    board[i, j] = 0;
+                }
+                return;
+            }
+        }
     }
 }
