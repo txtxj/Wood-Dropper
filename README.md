@@ -2,11 +2,12 @@
 
 大概已经有这个游戏了，但这个游戏肯定不叫下面截图中的这个名字……
 
-![](./Imgs/b.jpg)
+<img src="Imgs/b.jpg" width="250">
 
 还没写关卡，一个测试的截图如下：
 
-![](./Imgs/test.png)
+
+<img src="Imgs/test.png" width="250">
 
 关卡文件格式：
 
