@@ -23,6 +23,7 @@ public class MapInfo : MonoBehaviour
     public static List<Block> blockList;
     public static List<GameObject> blockObjList;
 
+    public static float delay = 0.5f;
     public static float speed = 20f;
     public static int animFlag = 0;
 
@@ -88,15 +89,19 @@ public class MapInfo : MonoBehaviour
         {
             board[p.layer, k + i] = p.id;
         }
-        MoveAnimation(blockObjList[index], Vector3.right * dis, 1);
+        MoveAnimation(blockObjList[index], Vector3.right * dis, 1, false);
     }
 
-    public static void MoveAnimation(GameObject obj, Vector3 direction, int type)
+    public static void MoveAnimation(GameObject obj, Vector3 direction, int type, bool isDelay)
     {
         animFlag -= 1;
         Hashtable hash = new Hashtable();
         hash.Add("position", obj.transform.position + direction * 2);
         hash.Add("speed", speed);
+        if (isDelay)
+        {
+            hash.Add("delay", delay);
+        }
         hash.Add("easeType", iTween.EaseType.linear);
         hash.Add("onComplete", "SignalFlag");
         hash.Add("onCompleteParams", type);
@@ -134,7 +139,7 @@ public class MapInfo : MonoBehaviour
                             board[depth, blockList[k].left + u] = k;
                         }
                         blockList[k].layer = depth;
-                        MoveAnimation(blockObjList[k], Vector3.down * (i - depth), ifDrop ? 0 : 2);
+                        MoveAnimation(blockObjList[k], Vector3.down * (i - depth), ifDrop ? 0 : 2, false);
                         ifDrop = true;
                     }
                     j += blockList[k].length - 1;
@@ -163,10 +168,11 @@ public class MapInfo : MonoBehaviour
                     if (board[i, j] != k)
                     {
                         k = board[i, j];
+                        Debug.Log(k);
                         blockObjList[k].tag = "UsedBlock";
                         blockObjList[k].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
                         blockObjList[k].GetComponent<Rigidbody>().useGravity = true;
-                        MoveAnimation(blockObjList[k], new Vector3(Random.Range(0.4f, 0.8f), Random.Range(0.4f, 0.8f), Random.Range(-1.0f, -1.4f)), j == 0 ? 0 : 1);
+                        MoveAnimation(blockObjList[k], new Vector3(Random.Range(0.4f, 0.8f), Random.Range(0.4f, 0.8f), Random.Range(-2.0f, -2.4f)), j == 0 ? 0 : 1, true);
                     }
                     board[i, j] = 0;
                 }
