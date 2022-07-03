@@ -4,8 +4,7 @@
 
 <img src="Imgs/b.jpg" width="250">
 
-还没写关卡，一个测试的截图如下：
-
+写了一个关卡，测试截图如下：
 
 <img src="Imgs/test.png" width="250">
 
