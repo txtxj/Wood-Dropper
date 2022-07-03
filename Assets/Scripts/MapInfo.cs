@@ -105,6 +105,7 @@ public class MapInfo : MonoBehaviour
 
     public static void Drop()
     {
+        bool ifDrop = false;
         for (int i = 1; i < 20; i++)
         {
             for (int j = 0; j < 12; j++)
@@ -133,7 +134,8 @@ public class MapInfo : MonoBehaviour
                             board[depth, blockList[k].left + u] = k;
                         }
                         blockList[k].layer = depth;
-                        MoveAnimation(blockObjList[k], Vector3.down * (i - depth), 2);
+                        MoveAnimation(blockObjList[k], Vector3.down * (i - depth), ifDrop ? 0 : 2);
+                        ifDrop = true;
                     }
                     j += blockList[k].length - 1;
                 }
@@ -161,9 +163,10 @@ public class MapInfo : MonoBehaviour
                     if (board[i, j] != k)
                     {
                         k = board[i, j];
+                        blockObjList[k].tag = "UsedBlock";
                         blockObjList[k].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
                         blockObjList[k].GetComponent<Rigidbody>().useGravity = true;
-                        MoveAnimation(blockObjList[k], Vector3.back * 2f + new Vector3(Random.Range(0.4f, 0.8f), Random.Range(0.4f, 0.8f), Random.Range(0.4f, 0.8f)), j == 0 ? 0 : 1);
+                        MoveAnimation(blockObjList[k], new Vector3(Random.Range(0.4f, 0.8f), Random.Range(0.4f, 0.8f), Random.Range(-1.0f, -1.4f)), j == 0 ? 0 : 1);
                     }
                     board[i, j] = 0;
                 }
