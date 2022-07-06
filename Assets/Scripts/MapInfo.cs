@@ -22,14 +22,16 @@ public class MapInfo : MonoBehaviour
     }
     public static List<Block> blockList;
     public static List<GameObject> blockObjList;
-
+    
     public static float delay = 0.5f;
     public static float speed = 20f;
     public static int animFlag = 0;
 
-    private void Awake()
+    public static Vector2Int size = new Vector2Int(12, 20);
+
+    private void Start()
     {
-        board = new int[20, 12];
+        board = new int[size.y, size.x];
         blockList = new List<Block>();
         blockObjList = new List<GameObject>();
         blockList.Add(null);
@@ -45,7 +47,7 @@ public class MapInfo : MonoBehaviour
         }
         if (direction == 1)
         {
-            return p.left + p.length < 12 && board[p.layer, p.left + p.length] == 0;
+            return p.left + p.length < size.x && board[p.layer, p.left + p.length] == 0;
         }
         return false;
     }
@@ -73,7 +75,7 @@ public class MapInfo : MonoBehaviour
         else
         {
             k = p.left + p.length;
-            for (int i = k; i < 12; i++)
+            for (int i = k; i < size.x; i++)
             {
                 if (board[p.layer, i] != 0)
                 {
@@ -96,7 +98,7 @@ public class MapInfo : MonoBehaviour
     {
         animFlag -= 1;
         Hashtable hash = new Hashtable();
-        hash.Add("position", obj.transform.position + direction * 2);
+        hash.Add("position", obj.transform.position + direction * 40f / size.y);
         hash.Add("speed", speed);
         if (isDelay)
         {
@@ -111,9 +113,9 @@ public class MapInfo : MonoBehaviour
     public static void Drop()
     {
         bool ifDrop = false;
-        for (int i = 1; i < 20; i++)
+        for (int i = 1; i < size.y; i++)
         {
-            for (int j = 0; j < 12; j++)
+            for (int j = 0; j < size.x; j++)
             {
                 if (board[i, j] != 0)
                 {
@@ -150,20 +152,20 @@ public class MapInfo : MonoBehaviour
 
     public static void CheckLayer()
     {
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < size.y; i++)
         {
             int j;
-            for (j = 0; j < 12; j++)
+            for (j = 0; j < size.x; j++)
             {
                 if (board[i, j] == 0)
                 {
                     break;
                 }
             }
-            if (j == 12)
+            if (j == size.x)
             {
                 int k = 0;
-                for (j = 0; j < 12; j++)
+                for (j = 0; j < size.x; j++)
                 {
                     if (board[i, j] != k)
                     {
