@@ -18,6 +18,10 @@ public class LevelManager : MonoBehaviour
         btManager = GameObject.Find("EventSystem").GetComponent<ButtonManager>();
         for (int id = 0; id < levelCount; id++)
         {
+            if (Resources.Load<TextAsset>("Levels/level" + id) == null)
+            {
+                return;
+            }
             GameObject bt = Instantiate(levelButtonPrefab, transform);
             bt.GetComponent<RectTransform>().anchoredPosition3D = new Vector3(-270f + 180f * column, 300f - 180f * row, 0f);
             bt.GetComponentInChildren<Text>().text = id.ToString();
