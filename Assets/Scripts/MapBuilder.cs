@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -57,7 +58,25 @@ public class MapBuilder : MonoBehaviour
         count += 1;
     }
 
-    private void DecodeLevel(byte[] level)
+    private void RecoverBlock(int left, int layer, int length)
+    {
+        GameObject block = MapInfo.blockObjList[count];
+        MapInfo.blockList[count].layer = layer;
+        MapInfo.blockList[count].left = left;
+        block.transform.localScale = new Vector3(length, 1f, 1f);
+        block.transform.localPosition = new Vector3(length / 2f + left, layer, 0f);
+        block.transform.localRotation = Quaternion.identity;
+        block.tag = "Block";
+        block.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        block.GetComponent<Rigidbody>().useGravity = false;
+        for (int i = 0; i < length; i++)
+        {
+            MapInfo.board[layer, left + i] = count;
+        }
+        count += 1;
+    }
+
+    private void DecodeLevel(byte[] level, Action<int, int, int> blockHandler)
     {
         int layer = 0, left = 0;
         int len = level.Length;
@@ -75,7 +94,7 @@ public class MapBuilder : MonoBehaviour
             }
             else
             {
-                CreateBlock(left, layer, level[i]);
+                blockHandler(left, layer, level[i]);
                 left += level[i];
             }
         }
@@ -83,6 +102,19 @@ public class MapBuilder : MonoBehaviour
 
     private void Start()
     {
-        DecodeLevel(levelText.bytes);
+        DecodeLevel(levelText.bytes, CreateBlock);
+    }
+
+    public void Retry()
+    {
+        count = 1;
+        for (int i = 0; i < size.y; i++)
+        {
+            for (int j = 0; j < size.x; j++)
+            {
+                MapInfo.board[i, j] = 0;
+            }
+        }
+        DecodeLevel(levelText.bytes, RecoverBlock);
     }
 }

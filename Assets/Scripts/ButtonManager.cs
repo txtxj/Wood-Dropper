@@ -27,4 +27,9 @@ public class ButtonManager : MonoBehaviour
         GameObject.Find("LevelObject").GetComponent<LevelInfo>().id = id;
         SceneManager.LoadScene(1);
     }
+
+    public void ExitGame()
+    {
+        SceneManager.LoadScene(0);
+    }
 }

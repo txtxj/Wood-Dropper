@@ -110,6 +110,21 @@ public class MapInfo : MonoBehaviour
         iTween.MoveTo(obj, hash);
     }
 
+    public static void ShiningAnimation(GameObject obj)
+    {
+        Hashtable hash0 = new Hashtable();
+        hash0.Add("color", new Color(2f, 2f, 2f));
+        hash0.Add("easeType", iTween.EaseType.linear);
+        hash0.Add("time", delay / 2f);
+        iTween.ColorTo(obj, hash0);
+        Hashtable hash1 = new Hashtable();
+        hash1.Add("color", new Color(1f, 1f, 1f));
+        hash1.Add("easeType", iTween.EaseType.linear);
+        hash1.Add("time", delay / 2f);
+        hash1.Add("delay", delay / 2f);
+        iTween.ColorTo(obj, hash1);
+    }
+
     public static void Drop()
     {
         bool ifDrop = false;
@@ -170,10 +185,10 @@ public class MapInfo : MonoBehaviour
                     if (board[i, j] != k)
                     {
                         k = board[i, j];
-                        Debug.Log(k);
                         blockObjList[k].tag = "UsedBlock";
                         blockObjList[k].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
                         blockObjList[k].GetComponent<Rigidbody>().useGravity = true;
+                        ShiningAnimation(blockObjList[k]);
                         MoveAnimation(blockObjList[k], new Vector3(Random.Range(0.4f, 0.8f), Random.Range(0.4f, 0.8f), Random.Range(-2.0f, -2.4f)), j == 0 ? 0 : 1, true);
                     }
                     board[i, j] = 0;
