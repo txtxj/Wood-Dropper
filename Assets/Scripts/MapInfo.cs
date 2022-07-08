@@ -110,19 +110,22 @@ public class MapInfo : MonoBehaviour
         iTween.MoveTo(obj, hash);
     }
 
-    public static void ShiningAnimation(GameObject obj)
+    private static void ColorTo(GameObject obj, Color color, float time, float delay)
     {
         Hashtable hash0 = new Hashtable();
-        hash0.Add("color", new Color(2f, 2f, 2f));
+        hash0.Add("color", color);
         hash0.Add("easeType", iTween.EaseType.linear);
-        hash0.Add("time", delay / 2f);
+        hash0.Add("delay", delay);
+        hash0.Add("time", time);
         iTween.ColorTo(obj, hash0);
-        Hashtable hash1 = new Hashtable();
-        hash1.Add("color", new Color(1f, 1f, 1f));
-        hash1.Add("easeType", iTween.EaseType.linear);
-        hash1.Add("time", delay / 2f);
-        hash1.Add("delay", delay / 2f);
-        iTween.ColorTo(obj, hash1);
+    }
+
+    public static void ShiningAnimation(GameObject obj)
+    {
+        ColorTo(obj, new Color(1.5f, 1.5f, 1.5f), delay * 0.25f, 0f);
+        ColorTo(obj, new Color(1f, 1f, 1f), delay * 0.25f, delay * 0.25f);
+        ColorTo(obj, new Color(1.5f, 1.5f, 1.5f), delay * 0.25f, delay * 0.5f);
+        ColorTo(obj, new Color(1f, 1f, 1f), delay * 0.25f, delay * 0.75f);
     }
 
     public static void Drop()
