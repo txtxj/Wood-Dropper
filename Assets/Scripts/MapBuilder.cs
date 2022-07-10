@@ -13,6 +13,9 @@ public class MapBuilder : MonoBehaviour
     [Header("Block movement option")]
     public float delay = 0.5f;
     public float speed = 20f;
+
+    [Space(10)]
+    public GameObject winMenu;
     
     private int count = 1;
     private TextAsset levelText;
@@ -41,6 +44,8 @@ public class MapBuilder : MonoBehaviour
         MapInfo.delay = delay;
         MapInfo.speed = speed;
         MapInfo.size = size;
+        
+        MapInfo.winMenu = winMenu;
     }
 
     private void CreateBlock(int left, int layer, int length)
@@ -98,6 +103,7 @@ public class MapBuilder : MonoBehaviour
                 left += level[i];
             }
         }
+        MapInfo.blockCount = count - 1;
     }
 
     private void Start()
@@ -120,6 +126,7 @@ public class MapBuilder : MonoBehaviour
                 MapInfo.board[i, j] = 0;
             }
         }
+        winMenu.SetActive(false);
         DecodeLevel(levelText.bytes, RecoverBlock);
         AudioController.PlayAudio(0);
     }

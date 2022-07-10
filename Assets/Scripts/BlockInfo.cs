@@ -23,5 +23,9 @@ public class BlockInfo : MonoBehaviour
             AudioController.PlayAudio(0);
             MapInfo.Drop();
         }
+        else if (type == 4 && MapInfo.blockCount == 0)
+        {
+            MapInfo.Win();
+        }
     }
 }

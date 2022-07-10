@@ -27,6 +27,9 @@ public class MapInfo : MonoBehaviour
     public static float speed = 20f;
     public static int animFlag = 0;
 
+    public static int blockCount = 0;
+    public static GameObject winMenu = null;
+
     public static Vector2Int size = new Vector2Int(12, 20);
 
     private void Start()
@@ -189,15 +192,21 @@ public class MapInfo : MonoBehaviour
                     {
                         k = board[i, j];
                         blockObjList[k].tag = "UsedBlock";
+                        blockCount -= 1;
                         blockObjList[k].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
                         blockObjList[k].GetComponent<Rigidbody>().useGravity = true;
                         ShiningAnimation(blockObjList[k]);
-                        MoveAnimation(blockObjList[k], new Vector3(Random.Range(0.4f, 0.8f), Random.Range(0.4f, 0.8f), Random.Range(-2.0f, -2.4f)), j == 0 ? 0 : 3, true);
+                        MoveAnimation(blockObjList[k], new Vector3(Random.Range(0.4f, 0.8f), Random.Range(0.4f, 0.8f), Random.Range(-2.0f, -2.4f)), j == 0 ? 4 : 3, true);
                     }
                     board[i, j] = 0;
                 }
                 return;
             }
         }
+    }
+
+    public static void Win()
+    {
+        winMenu.SetActive(true);
     }
 }
