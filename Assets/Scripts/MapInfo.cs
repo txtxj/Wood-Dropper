@@ -192,7 +192,7 @@ public class MapInfo : MonoBehaviour
                         blockObjList[k].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
                         blockObjList[k].GetComponent<Rigidbody>().useGravity = true;
                         ShiningAnimation(blockObjList[k]);
-                        MoveAnimation(blockObjList[k], new Vector3(Random.Range(0.4f, 0.8f), Random.Range(0.4f, 0.8f), Random.Range(-2.0f, -2.4f)), j == 0 ? 0 : 1, true);
+                        MoveAnimation(blockObjList[k], new Vector3(Random.Range(0.4f, 0.8f), Random.Range(0.4f, 0.8f), Random.Range(-2.0f, -2.4f)), j == 0 ? 0 : 3, true);
                     }
                     board[i, j] = 0;
                 }

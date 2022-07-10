@@ -103,6 +103,7 @@ public class MapBuilder : MonoBehaviour
     private void Start()
     {
         DecodeLevel(levelText.bytes, CreateBlock);
+        AudioController.PlayAudio(0);
     }
 
     public void Retry()
@@ -120,5 +121,6 @@ public class MapBuilder : MonoBehaviour
             }
         }
         DecodeLevel(levelText.bytes, RecoverBlock);
+        AudioController.PlayAudio(0);
     }
 }
